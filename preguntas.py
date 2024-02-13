@@ -11,7 +11,7 @@ Utilice el archivo `data.csv` para resolver las preguntas.
 
 
 """
-import itertools
+import itertools, copy
 
 def reader(file):
     with open(file, "r") as f:
@@ -254,7 +254,17 @@ def pregunta_09():
     }
 
     """
-    return
+    global data
+    lista_nueva = [lista[4].split(",") for lista in data]
+    diccionario = dict()
+    for lista in lista_nueva:
+        for i in lista:
+            key = i.split(":")[0]
+            if key not in diccionario:
+                diccionario[key] = 1
+            else:
+                diccionario[key] += 1
+    return diccionario
 
 
 def pregunta_10():
@@ -275,7 +285,14 @@ def pregunta_10():
 
 
     """
-    return
+    global data
+    columna_4 = [i[3] for i in data]
+    columna_5 = [i[4] for i in data]
+    lista = list()
+    for i in range(len(data)):
+        lista.append((data[i][0], len(columna_4[i].split(",")), len(columna_5[i].split(","))))
+    return lista 
+
 
 
 def pregunta_11():
@@ -296,7 +313,19 @@ def pregunta_11():
 
 
     """
-    return
+    global data
+    data2 = copy.deepcopy(data)
+    for i in range(len(data2)):
+        data2[i][3] = data2[i][3].split(",")
+    diccionario = dict()
+    for row in data2:
+        for i in row[3]:
+            if i not in diccionario:
+                diccionario[i] = int(row[1])
+            else:
+                diccionario[i] += int(row[1])
+    return diccionario
+
 
 
 def pregunta_12():
@@ -314,4 +343,16 @@ def pregunta_12():
     }
 
     """
-    return
+    global data
+    data2 = copy.deepcopy(data)
+    for i in range(len(data2)):
+        data2[i][4] = data2[i][4].split(",")
+    diccionario = dict()
+    for row in data2:
+        for i in row[4]:
+            print(i)
+            if row[0] not in diccionario:
+                diccionario[row[0]] = int(i.split(":")[1])
+            else:
+                diccionario[row[0]] += int(i.split(":")[1])
+    return diccionario
