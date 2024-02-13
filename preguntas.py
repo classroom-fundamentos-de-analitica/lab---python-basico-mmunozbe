@@ -21,23 +21,21 @@ def reader(file):
 
 data = reader("data.csv")
 
-def pregunta_01(data):
+def pregunta_01():
     """
     Retorne la suma de la segunda columna.
 
     Rta/
     214
 
+
     """
+    global data
     return sum(int(i[1]) for i in data)
 
-    # lista = list()
-    # for row in itertools.groupby(sorted(data, key=lambda x: x[0]), key=lambda x: x[0]):
-    #     lista.append((row[0], len(list(row[1]))))
-    # return lista
 
 
-def pregunta_02(data):
+def pregunta_02():
     """
     Retorne la cantidad de registros por cada letra de la primera columna como la lista
     de tuplas (letra, cantidad), ordendas alfabéticamente.
@@ -52,13 +50,14 @@ def pregunta_02(data):
     ]
 
     """
+    global data
     lista = list()
     for row in itertools.groupby(sorted(data, key=lambda x: x[0]), key=lambda x: x[0]):
         lista.append((row[0], len(list(row[1]))))
     return lista
 
 
-def pregunta_03(data):
+def pregunta_03():
     """
     Retorne la suma de la columna 2 por cada letra de la primera columna como una lista
     de tuplas (letra, suma) ordendas alfabeticamente.
@@ -73,13 +72,14 @@ def pregunta_03(data):
     ]
 
     """
+    global data
     lista = list()
     for row in itertools.groupby(sorted(data, key=lambda x: x[0]), key=lambda x: x[0]):
         lista.append((row[0], sum(int(i[1]) for i in row[1])))
     return lista
 
 
-def pregunta_04(data):
+def pregunta_04():
     """
     La columna 3 contiene una fecha en formato `YYYY-MM-DD`. Retorne la cantidad de
     registros por cada mes, tal como se muestra a continuación.
@@ -101,13 +101,14 @@ def pregunta_04(data):
     ]
 
     """
+    global data
     lista = list()
     for row in itertools.groupby(sorted(data, key=lambda x: x[2].split("-")[1]), key=lambda x: x[2].split("-")[1]):
         lista.append((row[0], len(list(row[1]))))
     return lista
 
 
-def pregunta_05(data):
+def pregunta_05():
     """
     Retorne una lista de tuplas con el valor maximo y minimo de la columna 2 por cada
     letra de la columa 1.
@@ -122,6 +123,7 @@ def pregunta_05(data):
     ]
 
     """
+    global data
     lista = list()
     iterable = itertools.groupby(sorted(data, key=lambda x: x[0]), key=lambda x: x[0])
     for row in iterable:
@@ -132,7 +134,7 @@ def pregunta_05(data):
     return lista
 
 
-def pregunta_06(data):
+def pregunta_06():
     """
     La columna 5 codifica un diccionario donde cada cadena de tres letras corresponde a
     una clave y el valor despues del caracter `:` corresponde al valor asociado a la
@@ -154,7 +156,20 @@ def pregunta_06(data):
     ]
 
     """
-    return
+    global data
+    lista_nueva = [lista[4].split(",") for lista in data]
+    #make a dictionary with each chain of 3 characters in lista_nueva assigning as value a list with the values of the chain after each ":"
+    diccionario = dict()
+    for lista in lista_nueva:
+        for i in lista:
+            key = i.split(":")[0]
+            value = int(i.split(":")[1])
+            if key not in diccionario:
+                diccionario[key] = [value]
+            else:
+                diccionario[key].append(value)
+    lista_nueva = sorted([(key, min(value), max(value)) for key, value in diccionario.items()], key=lambda x: x[0])
+    return lista_nueva
 
 
 def pregunta_07():
@@ -178,7 +193,15 @@ def pregunta_07():
     ]
 
     """
-    return
+    global data
+    lista = list()
+    iterable = itertools.groupby(sorted(data, key=lambda x: x[1]), key=lambda x: x[1])
+    for row in iterable:
+        letters = list()
+        for i in row[1]:
+            letters.append(i[0])
+        lista.append((int(row[0]), letters))
+    return lista
 
 
 def pregunta_08():
@@ -203,7 +226,12 @@ def pregunta_08():
     ]
 
     """
-    return
+    global data
+    lista = pregunta_07()
+    lista_nueva = list()
+    for row in lista:
+        lista_nueva.append((row[0], sorted(list(set(row[1])))))
+    return lista_nueva
 
 
 def pregunta_09():
