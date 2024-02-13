@@ -11,9 +11,17 @@ Utilice el archivo `data.csv` para resolver las preguntas.
 
 
 """
+import itertools
 
+def reader(file):
+    with open(file, "r") as f:
+        data = f.readlines()
+        data = [i.strip().split("\t") for i in data]
+    return data
 
-def pregunta_01():
+data = reader("data.csv")
+
+def pregunta_01(data):
     """
     Retorne la suma de la segunda columna.
 
@@ -21,10 +29,15 @@ def pregunta_01():
     214
 
     """
-    return
+    return sum(int(i[1]) for i in data)
+
+    # lista = list()
+    # for row in itertools.groupby(sorted(data, key=lambda x: x[0]), key=lambda x: x[0]):
+    #     lista.append((row[0], len(list(row[1]))))
+    # return lista
 
 
-def pregunta_02():
+def pregunta_02(data):
     """
     Retorne la cantidad de registros por cada letra de la primera columna como la lista
     de tuplas (letra, cantidad), ordendas alfabéticamente.
@@ -39,10 +52,13 @@ def pregunta_02():
     ]
 
     """
-    return
+    lista = list()
+    for row in itertools.groupby(sorted(data, key=lambda x: x[0]), key=lambda x: x[0]):
+        lista.append((row[0], len(list(row[1]))))
+    return lista
 
 
-def pregunta_03():
+def pregunta_03(data):
     """
     Retorne la suma de la columna 2 por cada letra de la primera columna como una lista
     de tuplas (letra, suma) ordendas alfabeticamente.
@@ -57,10 +73,13 @@ def pregunta_03():
     ]
 
     """
-    return
+    lista = list()
+    for row in itertools.groupby(sorted(data, key=lambda x: x[0]), key=lambda x: x[0]):
+        lista.append((row[0], sum(int(i[1]) for i in row[1])))
+    return lista
 
 
-def pregunta_04():
+def pregunta_04(data):
     """
     La columna 3 contiene una fecha en formato `YYYY-MM-DD`. Retorne la cantidad de
     registros por cada mes, tal como se muestra a continuación.
@@ -82,10 +101,13 @@ def pregunta_04():
     ]
 
     """
-    return
+    lista = list()
+    for row in itertools.groupby(sorted(data, key=lambda x: x[2].split("-")[1]), key=lambda x: x[2].split("-")[1]):
+        lista.append((row[0], len(list(row[1]))))
+    return lista
 
 
-def pregunta_05():
+def pregunta_05(data):
     """
     Retorne una lista de tuplas con el valor maximo y minimo de la columna 2 por cada
     letra de la columa 1.
@@ -100,10 +122,17 @@ def pregunta_05():
     ]
 
     """
-    return
+    lista = list()
+    iterable = itertools.groupby(sorted(data, key=lambda x: x[0]), key=lambda x: x[0])
+    for row in iterable:
+        numbers = list()
+        for i in row[1]:
+            numbers.append(int(i[1]))
+        lista.append((row[0], max(numbers), min(numbers)))
+    return lista
 
 
-def pregunta_06():
+def pregunta_06(data):
     """
     La columna 5 codifica un diccionario donde cada cadena de tres letras corresponde a
     una clave y el valor despues del caracter `:` corresponde al valor asociado a la
