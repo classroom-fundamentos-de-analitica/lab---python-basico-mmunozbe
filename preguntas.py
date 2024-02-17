@@ -356,3 +356,4 @@ def pregunta_12():
             else:
                 diccionario[row[0]] += int(i.split(":")[1])
     return diccionario
+# hola jeje
