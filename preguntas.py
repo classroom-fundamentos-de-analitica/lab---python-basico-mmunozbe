@@ -11,7 +11,15 @@ Utilice el archivo `data.csv` para resolver las preguntas.
 
 
 """
+import itertools, copy
 
+def reader(file):
+    with open(file, "r") as f:
+        data = f.readlines()
+        data = [i.strip().split("\t") for i in data]
+    return data
+
+data = reader("data.csv")
 
 def pregunta_01():
     """
@@ -20,8 +28,11 @@ def pregunta_01():
     Rta/
     214
 
+
     """
-    return
+    global data
+    return sum(int(i[1]) for i in data)
+
 
 
 def pregunta_02():
@@ -39,7 +50,11 @@ def pregunta_02():
     ]
 
     """
-    return
+    global data
+    lista = list()
+    for row in itertools.groupby(sorted(data, key=lambda x: x[0]), key=lambda x: x[0]):
+        lista.append((row[0], len(list(row[1]))))
+    return lista
 
 
 def pregunta_03():
@@ -57,7 +72,11 @@ def pregunta_03():
     ]
 
     """
-    return
+    global data
+    lista = list()
+    for row in itertools.groupby(sorted(data, key=lambda x: x[0]), key=lambda x: x[0]):
+        lista.append((row[0], sum(int(i[1]) for i in row[1])))
+    return lista
 
 
 def pregunta_04():
@@ -82,7 +101,11 @@ def pregunta_04():
     ]
 
     """
-    return
+    global data
+    lista = list()
+    for row in itertools.groupby(sorted(data, key=lambda x: x[2].split("-")[1]), key=lambda x: x[2].split("-")[1]):
+        lista.append((row[0], len(list(row[1]))))
+    return lista
 
 
 def pregunta_05():
@@ -100,7 +123,15 @@ def pregunta_05():
     ]
 
     """
-    return
+    global data
+    lista = list()
+    iterable = itertools.groupby(sorted(data, key=lambda x: x[0]), key=lambda x: x[0])
+    for row in iterable:
+        numbers = list()
+        for i in row[1]:
+            numbers.append(int(i[1]))
+        lista.append((row[0], max(numbers), min(numbers)))
+    return lista
 
 
 def pregunta_06():
@@ -125,7 +156,20 @@ def pregunta_06():
     ]
 
     """
-    return
+    global data
+    lista_nueva = [lista[4].split(",") for lista in data]
+    #make a dictionary with each chain of 3 characters in lista_nueva assigning as value a list with the values of the chain after each ":"
+    diccionario = dict()
+    for lista in lista_nueva:
+        for i in lista:
+            key = i.split(":")[0]
+            value = int(i.split(":")[1])
+            if key not in diccionario:
+                diccionario[key] = [value]
+            else:
+                diccionario[key].append(value)
+    lista_nueva = sorted([(key, min(value), max(value)) for key, value in diccionario.items()], key=lambda x: x[0])
+    return lista_nueva
 
 
 def pregunta_07():
@@ -149,7 +193,15 @@ def pregunta_07():
     ]
 
     """
-    return
+    global data
+    lista = list()
+    iterable = itertools.groupby(sorted(data, key=lambda x: x[1]), key=lambda x: x[1])
+    for row in iterable:
+        letters = list()
+        for i in row[1]:
+            letters.append(i[0])
+        lista.append((int(row[0]), letters))
+    return lista
 
 
 def pregunta_08():
@@ -174,7 +226,12 @@ def pregunta_08():
     ]
 
     """
-    return
+    global data
+    lista = pregunta_07()
+    lista_nueva = list()
+    for row in lista:
+        lista_nueva.append((row[0], sorted(list(set(row[1])))))
+    return lista_nueva
 
 
 def pregunta_09():
@@ -197,7 +254,17 @@ def pregunta_09():
     }
 
     """
-    return
+    global data
+    lista_nueva = [lista[4].split(",") for lista in data]
+    diccionario = dict()
+    for lista in lista_nueva:
+        for i in lista:
+            key = i.split(":")[0]
+            if key not in diccionario:
+                diccionario[key] = 1
+            else:
+                diccionario[key] += 1
+    return diccionario
 
 
 def pregunta_10():
@@ -218,7 +285,14 @@ def pregunta_10():
 
 
     """
-    return
+    global data
+    columna_4 = [i[3] for i in data]
+    columna_5 = [i[4] for i in data]
+    lista = list()
+    for i in range(len(data)):
+        lista.append((data[i][0], len(columna_4[i].split(",")), len(columna_5[i].split(","))))
+    return lista 
+
 
 
 def pregunta_11():
@@ -239,7 +313,19 @@ def pregunta_11():
 
 
     """
-    return
+    global data
+    data2 = copy.deepcopy(data)
+    for i in range(len(data2)):
+        data2[i][3] = data2[i][3].split(",")
+    diccionario = dict()
+    for row in data2:
+        for i in row[3]:
+            if i not in diccionario:
+                diccionario[i] = int(row[1])
+            else:
+                diccionario[i] += int(row[1])
+    return diccionario
+
 
 
 def pregunta_12():
@@ -257,4 +343,17 @@ def pregunta_12():
     }
 
     """
-    return
+    global data
+    data2 = copy.deepcopy(data)
+    for i in range(len(data2)):
+        data2[i][4] = data2[i][4].split(",")
+    diccionario = dict()
+    for row in data2:
+        for i in row[4]:
+            print(i)
+            if row[0] not in diccionario:
+                diccionario[row[0]] = int(i.split(":")[1])
+            else:
+                diccionario[row[0]] += int(i.split(":")[1])
+    return diccionario
+# hola jeje
